@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# vim cache
+*.swp
+
+# pycharm files
+.idea/
+
+# cpp code
+*.c
+*.cpp
+*.o
+*.log
+
+# virtualenv
+venv/
+
+# Resource fold
+
+
+# migrations
+migrations/
