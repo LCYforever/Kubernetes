@@ -176,15 +176,15 @@ def stop_instance():
         ins = Instance.query.filter_by(id=iid).first()
         if ins is not None and ins.status == 0:
             ins_name = ins.instance_name
+            result_code = 0
             try:
                 container = client.containers.get(ins_name)
                 if container is not None:
-                    container.stop()
-                    time.sleep(5)            
+                    container.stop()       
                     ins.status = 1
                     db.session.add(ins)
                     db.session.commit()
-                    return jsonify({'message': 'stop success'}), 200
+                    result_code = 1
                 else:
                     print "container not exist"
                     return jsonify({'message_e': 'delete fail'}), 400
@@ -193,6 +193,10 @@ def stop_instance():
                 return jsonify({'message_e': 'delete fail,container does not exists'}), 400
             except docker.errors.APIError:
                 print "container delete fail"
+                return jsonify({'message_e': 'delete fail'}), 400
+            if result_code == 1:
+                return jsonify({'message': 'stop success'}), 200
+            else:
                 return jsonify({'message_e': 'delete fail'}), 400
         else:
             print "instance not exist"
@@ -206,8 +210,8 @@ def recover_instance():
         message_e = 'only post method is supported'
         return jsonify({'message': message_e}), 400
     else:
-        iid = json.loads(request.get_data())['iid']
-        ins = Instance.query.filter_by(id=iid).first_or_404()
+        ins_name = json.loads(request.get_data())['instancename']
+        ins = Instance.query.filter_by(instance_name=ins_name).first_or_404()
         if ins is not None and ins.status == 1:
             ins_name = ins.instance_name
             try:
@@ -217,7 +221,7 @@ def recover_instance():
                     ins.status = 0
                     db.session.add(ins)
                     db.session.commit()
-                    return jsonify({'message': 'recover success'}), 200
+                    return jsonify({'message': 'recover success', 'iid': ins.id}), 200
                 else:
                     print "container not exist"
                     return jsonify({'message_e': 'delete fail'}), 400
