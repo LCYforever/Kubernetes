@@ -82,4 +82,4 @@ CREATE TABLE `user` (
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES ('1', 'wurun', '123456', '1');
-INSERT INTO `user` VALUES ('2', 'gangan', 'pbkdf2:sha256:50000$zuCC2iru$31ffa30a5d9b435d6990ee871f57dffd12012fc6a7b7bb3e8858631ca276d883', '0');
+INSERT INTO `user` VALUES ('2', 'weixiaolong', 'pbkdf2:sha256:50000$zuCC2iru$31ffa30a5d9b435d6990ee871f57dffd12012fc6a7b7bb3e8858631ca276d883', '1');
