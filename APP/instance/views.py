@@ -29,13 +29,14 @@ def create_instance():
         image = Image.query.filter_by(id=image_id).first_or_404()
         image_name = image.image
         try:
-            if image.id == 1 or image.id == 2:
-                # Ubuntu or CentOs, just open ssh and upload
+            if image.id == 1 or image.id == 2 or image.id == 4:
+                # Ubuntu or CentOs or caffe, just open ssh and upload
                 container = client.containers.run(image_name, detach=True, cpu_period=100000,
                                                   cpu_quota=cpu * 100, mem_limit=str(memory) + "m",
                                                   ports={'8000/tcp': None, '8001/tcp': None},
                                                   memswap_limit=-1, name=instance_name)
             elif image.id == 3:
+                print cpu
                 # TensorFlow cpu version, open ssh, jupyter and dashboard
                 container = client.containers.run(image_name, detach=True, cpu_period=100000,
                                                   cpu_quota=cpu * 100, mem_limit=str(memory) + "m",
