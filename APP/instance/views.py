@@ -3,9 +3,11 @@ from flask import request, jsonify, make_response
 from ..util.authorize import user_auth
 from ..models import Image, Instance, User
 from .. import db
+from datetime import datetime
 import json
 import docker
 import time
+
 
 client = docker.from_env()
 
@@ -56,6 +58,7 @@ def create_instance():
             new_instance.user_id = user.id
             new_instance.image_id = image_id
             new_instance.instance_name = instance_name
+            new_instance.created_time = datetime.now()
             new_instance.cpu_num = cpu
             new_instance.memory_num = memory
             new_instance.user = user
@@ -122,7 +125,7 @@ def get_instance_proxy():
                 elif port == '8080':
                     proxy_name = 'jupyter-web'
                 elif port == '8888':
-                    proxy_name = 'dashboard'
+                    proxy_name = 'tensorboard'
                 proxys.append({'proxy_name': proxy_name, 'proxy_url': hostport})
             return jsonify({'proxys': proxys}), 200
     except docker.errors.NotFound:
